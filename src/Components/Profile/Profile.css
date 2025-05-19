@@ -1,0 +1,92 @@
+.profile-container {
+  min-height: 100vh;
+  background: var(--background);
+}
+
+.profile-content {
+  padding: 24px;
+  margin-top: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.profile-card {
+  width: 100%;
+  max-width: 600px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.profile-header h2 {
+  margin-top: 16px;
+  color: var(--text-primary);
+  font-size: 24px;
+}
+
+.profile-form {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.ant-avatar {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.ant-avatar:hover {
+  transform: scale(1.05);
+}
+
+.ant-form-item-label > label {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.ant-input {
+  border-radius: 8px;
+}
+
+.ant-input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.ant-input-textarea {
+  border-radius: 8px;
+}
+
+.profile-form .ant-form-item {
+  margin-bottom: 24px;
+}
+
+.profile-form .ant-form-item:last-child {
+  margin-bottom: 0;
+}
+
+.profile-form .ant-input[disabled],
+.profile-form .ant-input-textarea[disabled] {
+  color: rgba(0, 0, 0, 0.65);
+  background-color: #f5f5f5;
+  border-color: #d9d9d9;
+}

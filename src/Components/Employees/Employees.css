@@ -1,0 +1,108 @@
+.employees-container {
+  padding: 20px;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.employees-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 80px;
+}
+
+.component-header {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.component-header h2 {
+  margin: 0;
+  color: #1890ff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.component-header h2 svg {
+  font-size: 24px;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.header-content h2 {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.table-container {
+  margin-top: 20px;
+}
+
+/* Loading spinner container */
+.loading-container {
+  text-align: center;
+  padding: 50px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+}
+
+.loading-container p {
+  margin-top: 16px;
+  color: #1890ff;
+}
+
+/* Alert styles */
+.ant-alert {
+  margin-bottom: 16px;
+}
+
+.ant-alert-action {
+  margin-top: 8px;
+}
+
+/* Table Styles */
+.ant-table-thead > tr > th {
+  background-color: #f0f5ff;
+  color: #1890ff;
+  font-weight: 600;
+}
+
+.ant-table-tbody > tr:hover > td {
+  background-color: #e6f7ff;
+}
+
+/* Tag Colors for different shifts */
+.ant-tag-green {
+  background-color: #f6ffed;
+  border-color: #b7eb8f;
+  color: #52c41a;
+}
+
+.ant-tag-blue {
+  background-color: #e6f7ff;
+  border-color: #91d5ff;
+  color: #1890ff;
+}
+
+.ant-tag-orange {
+  background-color: #fff7e6;
+  border-color: #ffd591;
+  color: #fa8c16;
+}
+
+.ant-tag-purple {
+  background-color: #f9f0ff;
+  border-color: #d3adf7;
+  color: #722ed1;
+}

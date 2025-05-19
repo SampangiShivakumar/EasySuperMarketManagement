@@ -1,0 +1,122 @@
+.billing-container {
+  min-height: 100vh;
+  background: var(--background);
+}
+
+.billing-content {
+  padding: 24px;
+  margin-top: 70px;
+}
+
+.billing-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.billing-header h2 {
+  margin: 0;
+  font-size: 24px;
+  color: var(--text-primary);
+}
+
+.product-list {
+  margin: 16px 0;
+  padding: 16px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Bill Details Modal */
+.ant-modal-header {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 16px 24px;
+}
+
+.ant-modal-title {
+  font-size: 18px;
+  color: var(--text-primary);
+}
+
+.ant-modal-body {
+  padding: 24px;
+}
+
+.ant-form-item-label > label {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Product Table in Modal */
+.product-table {
+  margin: 16px 0;
+}
+
+.product-table .ant-table-thead > tr > th {
+  background: #fafafa;
+  color: var(--text-secondary);
+}
+
+.product-total {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--primary);
+  text-align: right;
+  padding: 16px 0;
+}
+
+/* Status Tags */
+.status-tag {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-paid {
+  background: #f6ffed;
+  color: #52c41a;
+  border: 1px solid #b7eb8f;
+}
+
+.status-pending {
+  background: #fff7e6;
+  color: #faad14;
+  border: 1px solid #ffd591;
+}
+
+.status-overdue {
+  background: #fff1f0;
+  color: #f5222d;
+  border: 1px solid #ffa39e;
+}
+
+/* Search and Add Button */
+.billing-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.ant-input-search {
+  width: 300px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .billing-header {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .billing-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .ant-input-search {
+    width: 100%;
+  }
+}
