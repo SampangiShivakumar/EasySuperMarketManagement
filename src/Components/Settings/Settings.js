@@ -1,5 +1,5 @@
-import React from 'react';
-import { Card, Form, Input, Button, Switch, Typography } from 'antd';
+import React, { useEffect } from 'react';
+import { Card, Form, Input, Button, Switch, Typography, message } from 'antd';
 import Navbar from '../../NavBar/Navbar1';
 import './Settings.css';
 
@@ -7,8 +7,23 @@ const Settings = () => {
   const [form] = Form.useForm();
   const { Title } = Typography;
 
+  // Load settings from localStorage
+  useEffect(() => {
+    const savedSettings = JSON.parse(localStorage.getItem('quickmart-settings'));
+    if (savedSettings) {
+      form.setFieldsValue(savedSettings);
+    }
+  }, [form]);
+
   const onFinish = (values) => {
+    localStorage.setItem('quickmart-settings', JSON.stringify(values));
+    message.success('Settings updated successfully!');
     console.log('Settings updated:', values);
+  };
+
+  const onReset = () => {
+    form.resetFields();
+    message.info('Settings reset to default.');
   };
 
   return (
@@ -31,17 +46,19 @@ const Settings = () => {
             <Form.Item
               name="storeName"
               label="Store Name"
-              rules={[{ required: true }]}
+              rules={[{ required: true, message: 'Please enter store name' }]}
             >
-              <Input />
+              <Input placeholder="Enter store name" />
             </Form.Item>
+
             <Form.Item
               name="email"
               label="Email"
-              rules={[{ required: true, type: 'email' }]}
+              rules={[{ required: true, type: 'email', message: 'Enter a valid email' }]}
             >
-              <Input />
+              <Input placeholder="Enter email address" />
             </Form.Item>
+
             <Form.Item
               name="darkMode"
               label="Dark Mode"
@@ -49,6 +66,7 @@ const Settings = () => {
             >
               <Switch />
             </Form.Item>
+
             <Form.Item
               name="notifications"
               label="Enable Notifications"
@@ -56,9 +74,13 @@ const Settings = () => {
             >
               <Switch />
             </Form.Item>
-            <Form.Item>
+
+            <Form.Item className="settings-btn-group">
               <Button type="primary" htmlType="submit" className="settings-submit-btn">
                 Save Settings
+              </Button>
+              <Button htmlType="button" onClick={onReset} className="settings-reset-btn" style={{ marginLeft: '12px' }}>
+                Reset
               </Button>
             </Form.Item>
           </Form>

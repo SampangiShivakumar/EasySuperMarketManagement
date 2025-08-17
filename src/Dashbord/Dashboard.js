@@ -30,35 +30,48 @@ const Dashboard = () => {
       console.log('Connected to dashboard server');
     });
 
+    // Listen for both sales and bill updates
     socket.on('newSale', (data) => {
-      const today = new Date().toISOString().split('T')[0];
-      if (data.Date === today) {
-        setTodaysSales(prevSales => {
-          const newTotal = data.dailyTotal || (prevSales + data.Total);
-          const trendValue = prevSales > 0 ? ((newTotal - prevSales) / prevSales) * 100 : 100;
-          setSalesTrend(trendValue);
-          return newTotal;
-        });
+      console.log('Received newSale event:', data);
+      if (data.dailyTotal !== undefined) {
+        setTodaysSales(data.dailyTotal);
+        // Calculate trend
+        const trendValue = todaysSales > 0 ? ((data.dailyTotal - todaysSales) / todaysSales) * 100 : 100;
+        setSalesTrend(trendValue);
+      }
+    });
+
+    socket.on('billUpdated', (data) => {
+      console.log('Received billUpdated event:', data);
+      // Refresh sales data when a bill is added or updated
+      if (data.type === 'added' || data.type === 'updated') {
+        fetchTodaysSales();
       }
     });
 
     socket.on('monthlyRevenueUpdated', (data) => {
+      console.log('Received monthlyRevenueUpdated event:', data);
       setMonthlyRevenue(data.total);
       setMonthlyRevenueTrend(data.trend);
     });
 
     return () => {
       socket.off('newSale');
+      socket.off('billUpdated');
       socket.off('monthlyRevenueUpdated');
+      socket.disconnect();
     };
-  }, []);
+  }, [todaysSales]); // Add todaysSales as dependency for correct trend calculation
 
   const fetchTodaysSales = async () => {
     try {
       setLoading(true);
-      const today = new Date().toISOString().split('T')[0];
-      const response = await fetch(`http://localhost:5002/api/sales/daily?date=${today}`);
+      const response = await fetch('http://localhost:5002/api/sales/daily');
+      if (!response.ok) {
+        throw new Error('Failed to fetch sales data');
+      }
       const data = await response.json();
+      console.log('Fetched daily sales data:', data);
       setTodaysSales(data.total || 0);
       setSalesTrend(data.trend || 0);
     } catch (error) {
@@ -110,7 +123,7 @@ const Dashboard = () => {
         maximumFractionDigits: 0
       }),
       trend: salesTrend,
-      period: "vs previous sale"
+      period: "vs previous day sale"
     },
     {
       title: "Total Products",

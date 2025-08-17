@@ -18,7 +18,7 @@ const Home = () => {
         style={{ backgroundImage: `url('/homepage.avif')`, backgroundSize: 'cover', backgroundPosition: 'center', color: 'white', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}
       >
         <h1 style={{ fontSize: '3rem', fontWeight: 'bold', textShadow: '3px 3px 6px rgba(0, 0, 0, 0.8)', color: '#f8f9fa', padding: '0 20px', lineHeight: '1.5' }}>
-          Efficiency in every transaction,<br /> clarity in every record —<br /> where smart management meets seamless shopping.
+          Efficiency in every transaction,<br /> clarity in every record —<br /> where Quick Mart Management meets seamless shopping.
         </h1>
       </div>
       <Navbar />

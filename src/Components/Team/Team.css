@@ -1,0 +1,74 @@
+/* Team.css */
+
+.team-container {
+  padding: 60px 20px;
+  background: #f0f4ff;
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+.team-container h1 {
+  font-size: 2.5rem;
+  margin-bottom: 50px;
+  color: #1e40af;
+  font-weight: bold;
+}
+
+.team-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+
+.team-card {
+  background: #e6eaf5;
+  border-radius: 20px;
+  width: 280px;
+  padding: 30px 20px;
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.team-card:hover {
+  transform: translateY(-10px);
+}
+
+.team-card img {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 20px;
+}
+
+.team-card h3 {
+  font-size: 1.25rem;
+  color: #1e3a8a;
+  margin: 10px 0 5px;
+}
+
+.team-card .role {
+  color: #3b82f6;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.team-card .desc {
+  font-size: 0.95rem;
+  color: #475569;
+  margin-bottom: 15px;
+}
+
+.social-icons a {
+  margin: 0 8px;
+  display: inline-block;
+}
+
+.social-icons img {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.2s ease;
+}
+
+.social-icons img:hover {
+  transform: scale(1.2);
+}

@@ -1,8 +1,7 @@
-const Dotenv = require('dotenv-webpack');
-const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
@@ -15,54 +14,32 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(js|jsx|ts|tsx)$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              '@babel/preset-env',
-              ['@babel/preset-react', { runtime: 'automatic' }]
-            ],
-            plugins: [
-              '@babel/plugin-proposal-private-methods',
-              '@babel/plugin-proposal-private-property-in-object',
-              '@babel/plugin-transform-private-property-in-object'
-            ]
-          }
-        }
+        use: ['babel-loader']
       },
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader']
-      },
-      {
-        test: /\.(png|svg|jpg|jpeg|gif|ico)$/,
-        type: 'asset/resource'
       }
     ]
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.ts', '.tsx'],
+    extensions: ['.js', '.jsx'],
     fallback: {
-      "path": require.resolve("path-browserify"),
-      "os": require.resolve("os-browserify/browser"),
-      "crypto": require.resolve("crypto-browserify"),
-      "stream": require.resolve("stream-browserify"),
-      "buffer": require.resolve("buffer/"),
-      "util": require.resolve("util/"),
-      "assert": require.resolve("assert/"),
-      "http": require.resolve("stream-http"),
-      "url": require.resolve("url/"),
-      "https": require.resolve("https-browserify"),
-      "net": require.resolve("net-browserify"),
-      "tls": require.resolve("tls-browserify"),
-      "dns": require.resolve("dns.js"),
-      "zlib": require.resolve("browserify-zlib"),
-      "fs": require.resolve("fs-browserify"),
-      "child_process": false,
-      "timers": require.resolve("timers-browserify"),
-      "process": require.resolve("process/browser")
+      "crypto": require.resolve('crypto-browserify'),
+      "stream": require.resolve('stream-browserify'),
+      "assert": require.resolve('assert/'),
+      "http": require.resolve('stream-http'),
+      "https": require.resolve('https-browserify'),
+      "os": require.resolve('os-browserify/browser'),
+      "url": require.resolve('url/'),
+      "net": false,
+      "tls": require.resolve('tls-browserify'),
+      "dns": require.resolve('dns'),
+      "zlib": require.resolve('browserify-zlib'),
+      "path": require.resolve('path-browserify'),
+      "fs": false
     }
   },
   plugins: [
@@ -70,11 +47,7 @@ module.exports = {
       template: './public/index.html'
     }),
     new ReactRefreshWebpackPlugin(),
-    new Dotenv(),
-    new webpack.ProvidePlugin({
-      process: 'process/browser',
-      Buffer: ['buffer', 'Buffer']
-    })
+    new Dotenv()
   ],
   devServer: {
     hot: true,

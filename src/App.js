@@ -1,5 +1,7 @@
 import React, { createContext, useState, useContext, useEffect, useCallback, useMemo } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, HashRouter } from 'react-router-dom';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { GOOGLE_CLIENT_ID } from './config/auth.config';
 import Dashboard from './Dashbord/Dashboard.js';
 import POS from './Components/POS/POS.js';
 import Inventory from './Components/Inventory/Inventory.js';
@@ -14,6 +16,9 @@ import Signup from './Components/Signup/Signup';
 import Profile from './Components/Profile/Profile';
 import Home from './Components/Home';
 import ErrorBoundary from './Components/shared/ErrorBoundary';
+import About from './Components/About/About';
+import Team from './Components/Team/Team';
+import Contact from './Components/Contact/Contact';
 import './App.css';
 
 // Helper functions
@@ -121,48 +126,116 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
-function App() {
+const App = () => {
   return (
     <ErrorBoundary>
-      <SalesProvider>
-        <div className="app-container">
-          <Routes>
-            <Route path="/" element={<Navigate to="/home" />} />
-            <Route path="/404" element={<div>Page Not Found</div>} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            
-            {[
-              { path: "/dashboard", element: <Dashboard /> },
-              { path: "/pos", element: <POS /> },
-              { path: "/inventory", element: <Inventory /> },
-              { path: "/sales", element: <Sales /> },
-              { path: "/employees", element: <Employees /> },
-              { path: "/reports", element: <Reports /> },
-              { path: "/settings", element: <Settings /> },
-              { path: "/billing", element: <Billing /> },
-              { path: "/products", element: <Products /> },
-              { path: "/profile", element: <Profile /> }
-            ].map(({ path, element }) => (
-              <Route
-                key={path}
-                path={path}
-                element={
-                  <ProtectedRoute>
-                    <div className="route-transition">
-                      {element}
-                    </div>
-                  </ProtectedRoute>
-                }
-              />
-            ))}
-          </Routes>
-        </div>
-      </SalesProvider>
+      <HashRouter>
+        <GoogleOAuthProvider 
+        clientId={GOOGLE_CLIENT_ID}
+        onScriptLoadError={() => {
+          console.error('Failed to load Google OAuth script');
+        }}
+        onScriptLoadSuccess={() => {
+          console.log('Google OAuth script loaded successfully');
+        }}
+      >
+        <SalesProvider>
+          <div className="App">
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route
+                  path="/dashboard"
+                  element={
+                    <ProtectedRoute>
+                      <Dashboard />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/about" element={<About />} />
+                <Route path="/team" element={<Team />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route
+                  path="/pos"
+                  element={
+                    <ProtectedRoute>
+                      <POS />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/inventory"
+                  element={
+                    <ProtectedRoute>
+                      <Inventory />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/sales"
+                  element={
+                    <ProtectedRoute>
+                      <Sales />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/employees"
+                  element={
+                    <ProtectedRoute>
+                      <Employees />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/reports"
+                  element={
+                    <ProtectedRoute>
+                      <Reports />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/settings"
+                  element={
+                    <ProtectedRoute>
+                      <Settings />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/billing"
+                  element={
+                    <ProtectedRoute>
+                      <Billing />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/products"
+                  element={
+                    <ProtectedRoute>
+                      <Products />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/profile"
+                  element={
+                    <ProtectedRoute>
+                      <Profile />
+                    </ProtectedRoute>
+                  }
+                />
+              </Routes>
+            </div>
+        </SalesProvider>
+      </GoogleOAuthProvider>
+      </HashRouter>
     </ErrorBoundary>
   );
-}
+};
 
 export { safeNumberFormat, useSales };
 export default App;

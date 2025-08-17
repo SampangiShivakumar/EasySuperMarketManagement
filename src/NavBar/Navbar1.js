@@ -51,7 +51,7 @@ const Navbar = () => {
           Dashboard
         </Button>
        
-        <Button 
+      <Button 
           className="nav-button contact-button"
           onClick={() => navigate('/contact')}
           icon={<PhoneOutlined />}

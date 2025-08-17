@@ -17,15 +17,32 @@ const POS = () => {
   useEffect(() => {
     fetchProducts();
   }, []);
-
   const fetchProducts = async () => {
     try {
       setLoading(true);
       const response = await fetch('http://localhost:5002/api/products');
       const data = await response.json();
-      setProducts(data);
+      
+      // Ensure products is always an array
+      const productsArray = Array.isArray(data.products) ? data.products : [];
+      
+      // Validate and transform each product
+      const validatedProducts = productsArray.map(product => ({
+        _id: product._id || '',
+        productId: product.productId || '',
+        name: product.name || '',
+        category: product.category || '',
+        price: typeof product.price === 'number' ? product.price : 0,
+        costPrice: typeof product.costPrice === 'number' ? product.costPrice : 0,
+        stock: typeof product.stock === 'number' ? product.stock : 0,
+        description: product.description || ''
+      }));
+
+      setProducts(validatedProducts);
     } catch (error) {
+      console.error('Error fetching products:', error);
       message.error('Failed to fetch products');
+      setProducts([]); // Set empty array on error
     } finally {
       setLoading(false);
     }
@@ -73,9 +90,24 @@ const POS = () => {
     const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
     return `${year}${month}${day}-${random}`;
   };
-
   const handleCheckout = async () => {
     try {
+      if (cart.length === 0) {
+        message.error('Cart is empty');
+        return;
+      }
+
+      // First, verify stock availability
+      for (const item of cart) {
+        const product = products.find(p => p._id === item._id);
+        if (!product) {
+          throw new Error(`Product not found: ${item.name}`);
+        }
+        if (product.stock < item.quantity) {
+          throw new Error(`Insufficient stock for ${item.name}. Available: ${product.stock}`);
+        }
+      }
+
       const { subtotal, tax, total } = calculateTotal();
       const sale = {
         InvoiceID: generateInvoiceId(),
@@ -88,7 +120,13 @@ const POS = () => {
         Tax: tax,
         Total: total,
         Payment: payment,
-        City: city
+        City: city,
+        products: cart.map(item => ({
+          productId: item._id,
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price
+        }))
       };
 
       const response = await fetch('http://localhost:5002/api/sales', {
@@ -99,19 +137,25 @@ const POS = () => {
         body: JSON.stringify(sale),
       });
 
-      if (response.ok) {
-        // Update product stock
-        await Promise.all(cart.map(item =>
-          fetch(`http://localhost:5002/api/products/${item._id}`, {
+      if (response.ok) {        // Update product stock for each item
+        for (const item of cart) {
+          const response = await fetch(`http://localhost:5002/api/products/${item._id}/stock`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('token')}`
             },
             body: JSON.stringify({
-              stock: item.stock - item.quantity
+              quantity: item.quantity,
+              operation: 'decrease'
             })
-          })
-        ));
+          });
+
+          if (!response.ok) {
+            const error = await response.json();
+            throw new Error(`Failed to update stock for ${item.name}: ${error.message}`);
+          }
+        }
 
         message.success('Sale completed successfully');
         setCart([]); // Clear cart after successful sale
@@ -122,11 +166,12 @@ const POS = () => {
       message.error('Failed to process sale: ' + error.message);
     }
   };
-
-  const filteredProducts = products.filter(product => 
-    product.name.toLowerCase().includes(searchText.toLowerCase()) ||
-    product.category.toLowerCase().includes(searchText.toLowerCase())
-  );
+  const filteredProducts = Array.isArray(products) ? products.filter(product => {
+    const searchQuery = searchText.toLowerCase();
+    const productName = (product.name || '').toLowerCase();
+    const productCategory = (product.category || '').toLowerCase();
+    return productName.includes(searchQuery) || productCategory.includes(searchQuery);
+  }) : [];
 
   return (
     <div className="pos-container">

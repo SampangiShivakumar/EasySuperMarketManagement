@@ -49,58 +49,49 @@ mongoose.connect('mongodb://localhost:27017/easymanager', {
 
 const productsData = [
   {
-    productId: 'PRD0001',
-    name: 'Smart LED TV',
-    category: 'Electronics',
-    price: 45999.99,
-    costPrice: 38000.00,
-    stock: 15,
-    description: '55-inch 4K Smart LED TV'
+    productId: '101', name: 'Milk (1L)', category: 'Dairy', price: 60, costPrice: 52, stock: 15, lowStockThreshold: 10, expirationDate: new Date('2025-07-25')
   },
   {
-    productId: 'PRD0002',
-    name: 'Premium Coffee',
-    category: 'Food & Beverages',
-    price: 499.99,
-    costPrice: 300.00,
-    stock: 50,
-    description: 'Premium Arabica Coffee Beans 500g'
+    productId: '102', name: 'Bread (500g)', category: 'Bakery', price: 48, costPrice: 40, stock: 8, lowStockThreshold: 20, expirationDate: new Date('2025-07-20')
   },
   {
-    productId: 'PRD0003',
-    name: 'Designer Watch',
-    category: 'Fashion',
-    price: 2999.99,
-    costPrice: 1800.00,
-    stock: 25,
-    description: 'Luxury Analog Watch'
+    productId: '103', name: 'Eggs (6 pack)', category: 'Poultry', price: 45, costPrice: 36, stock: 22, lowStockThreshold: 15, expirationDate: new Date('2025-07-30')
   },
   {
-    productId: 'PRD0004',
-    name: 'Air Purifier',
-    category: 'Home & Lifestyle',
-    price: 15999.99,
-    costPrice: 12000.00,
-    stock: 10,
-    description: 'HEPA Air Purifier with IoT'
+    productId: '104', name: 'Rice (5kg)', category: 'Grains', price: 320, costPrice: 280, stock: 12, lowStockThreshold: 5, expirationDate: new Date('2026-03-01')
   },
   {
-    productId: 'PRD0005',
-    name: 'Face Serum',
-    category: 'Health & Beauty',
-    price: 999.99,
-    costPrice: 500.00,
-    stock: 30,
-    description: 'Vitamin C Face Serum 30ml'
+    productId: '105', name: 'Sugar (1kg)', category: 'Grocery', price: 55, costPrice: 48, stock: 25, lowStockThreshold: 10, expirationDate: new Date('2026-02-20')
   },
   {
-    productId: 'PRD0006',
-    name: 'Wireless Earbuds',
-    category: 'Electronics',
-    price: 1999.99,
-    costPrice: 1200.00,
-    stock: 40,
-    description: 'TWS Bluetooth Earbuds'
+    productId: '106', name: 'Salt (1kg)', category: 'Grocery', price: 25, costPrice: 20, stock: 40, lowStockThreshold: 8, expirationDate: new Date('2027-05-01')
+  },
+  {
+    productId: '107', name: 'Toothpaste (150g)', category: 'Personal Care', price: 95, costPrice: 75, stock: 6, lowStockThreshold: 10, expirationDate: new Date('2026-12-01')
+  },
+  {
+    productId: '108', name: 'Shampoo (200ml)', category: 'Personal Care', price: 150, costPrice: 120, stock: 10, lowStockThreshold: 5, expirationDate: new Date('2026-11-15')
+  },
+  {
+    productId: '109', name: 'Maggi (4 pack)', category: 'Instant Foods', price: 60, costPrice: 50, stock: 28, lowStockThreshold: 30, expirationDate: new Date('2025-10-10')
+  },
+  {
+    productId: '110', name: 'Soap (pack of 3)', category: 'Personal Care', price: 110, costPrice: 90, stock: 14, lowStockThreshold: 15, expirationDate: new Date('2027-01-10')
+  },
+  {
+    productId: '111', name: 'Tea Powder (250g)', category: 'Beverages', price: 95, costPrice: 85, stock: 9, lowStockThreshold: 10, expirationDate: new Date('2026-07-01')
+  },
+  {
+    productId: '112', name: 'Oil (1L)', category: 'Grocery', price: 165, costPrice: 145, stock: 18, lowStockThreshold: 12, expirationDate: new Date('2025-12-01')
+  },
+  {
+    productId: '113', name: 'Detergent (1kg)', category: 'Cleaning', price: 120, costPrice: 105, stock: 5, lowStockThreshold: 7, expirationDate: new Date('2026-09-09')
+  },
+  {
+    productId: '114', name: 'Biscuits (pack)', category: 'Snacks', price: 30, costPrice: 25, stock: 30, lowStockThreshold: 25, expirationDate: new Date('2025-08-05')
+  },
+  {
+    productId: '115', name: 'Cold Drink (500ml)', category: 'Beverages', price: 45, costPrice: 35, stock: 50, lowStockThreshold: 20, expirationDate: new Date('2025-09-15')
   }
 ];
 

@@ -13,17 +13,51 @@ const Sale = mongoose.model('Sale', new mongoose.Schema({
   City: String,
 }));
 
-mongoose.connect('mongodb://localhost:27017/easymanager', {
+mongoose.connect('mongodb://127.0.0.1:27017/supermarketDB', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => console.log('MongoDB connected successfully'))
-.catch(err => console.error('MongoDB connection error:', err));
+.then(async () => {
+  console.log('MongoDB connected successfully');
+  try {
+    // Clear existing sales
+    await Sale.deleteMany({});
+    console.log('Cleared existing sales');
+    
+    // Insert new sales data
+    const result = await Sale.insertMany(salesData);
+    console.log(`Successfully inserted ${result.length} sales records`);
+    
+    // Verify insertion
+    const count = await Sale.countDocuments();
+    console.log(`Total sales in database: ${count}`);
+    
+    // Get a sample record
+    const sample = await Sale.findOne();
+    console.log('Sample sale record:', sample);
+    
+    // Close the connection
+    await mongoose.connection.close();
+    console.log('Database connection closed');
+  } catch (error) {
+    console.error('Error:', error);
+    process.exit(1);
+  }
+})
+.catch(err => {
+  console.error('MongoDB connection error:', err);
+  process.exit(1);
+});
+
+const getCurrentDate = () => {
+  const now = new Date();
+  return now.toISOString().split('T')[0];
+};
 
 const salesData = [
   {
     InvoiceID: "100-01-001",
-    Date: "2025-04-01",
+    Date: getCurrentDate(),
     CustomerType: "Member",
     Gender: "Male",
     ProductLine: "Health & Beauty",
@@ -34,9 +68,8 @@ const salesData = [
     Payment: "Credit",
     City: "Hyderabad"
   },
-  {
-    InvoiceID: "100-01-002",
-    Date: "2025-04-01",
+  {    InvoiceID: "100-01-002",
+    Date: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().split('T')[0], // Yesterday
     CustomerType: "Normal",
     Gender: "Female",
     ProductLine: "Food & Beverages",
@@ -129,9 +162,22 @@ const salesData = [
 
 const insertSales = async () => {
   try {
+    // Clear existing sales
     await Sale.deleteMany({});
-    await Sale.insertMany(salesData);
-    console.log('Sales data inserted successfully');
+    console.log('Cleared existing sales');
+
+    // Insert new sales data
+    const result = await Sale.insertMany(salesData);
+    console.log(`Successfully inserted ${result.length} sales records`);
+
+    // Verify insertion
+    const count = await Sale.countDocuments();
+    console.log(`Total sales in database: ${count}`);
+
+    // Get a sample record
+    const sample = await Sale.findOne();
+    console.log('Sample sale record:', sample);
+
   } catch (error) {
     console.error('Error inserting sales:', error);
   } finally {

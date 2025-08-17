@@ -1,0 +1,64 @@
+.contact-container {
+  min-height: 100vh;
+  width: 100vw;
+  background: url('/public/shopping.jpg') center center/cover no-repeat fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 40px 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.contact-content {
+  background: rgba(255, 255, 255, 0.85);
+  padding: 50px 40px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  backdrop-filter: blur(5px);
+}
+
+.contact-content h2 {
+  color: #1d4ed8;
+  margin-bottom: 24px;
+  font-size: 2.2rem;
+  font-weight: 600;
+}
+
+.contact-content p {
+  color: #334155;
+  font-size: 1.1rem;
+  margin-bottom: 24px;
+}
+
+.contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.contact-list li {
+  margin-bottom: 16px;
+  font-size: 1.1rem;
+  color: #1e293b;
+  transition: transform 0.2s ease;
+}
+
+.contact-list li:hover {
+  transform: scale(1.03);
+}
+
+.contact-list a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.contact-list a:hover {
+  text-decoration: underline;
+  color: #1d4ed8;
+}

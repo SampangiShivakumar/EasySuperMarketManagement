@@ -212,7 +212,7 @@
   border: none;
   border-radius: 20px;
   overflow: hidden;
-  background: white !important;
+  background: rgb(254, 254, 254) !important;
   transition: all 0.3s ease;
   position: relative;
   transform-style: preserve-3d;

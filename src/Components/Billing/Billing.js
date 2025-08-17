@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Input, Space, Modal, Form, DatePicker, InputNumber, Select, message, Row, Col } from 'antd';
 import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
+import moment from 'moment';
 import { io } from 'socket.io-client';
 import Navbar from '../../NavBar/Navbar1';
 import './Billing.css';
@@ -160,18 +161,20 @@ const Billing = () => {
         </Space>
       ),
     },
-  ];
-
-  const handleAdd = () => {
+  ];  const handleAdd = () => {
     form.resetFields();
+    // Set today's date by default using moment
+    form.setFieldsValue({
+      date: moment(),
+      status: 'pending'
+    });
     setSelectedProducts([]);
     setIsModalVisible(true);
   };
-
   const handleEdit = (record) => {
     form.setFieldsValue({
       ...record,
-      date: record.date ? new Date(record.date) : null,
+      date: record.date ? moment(record.date) : null,
     });
     setSelectedProducts(record.products || []);
     setIsModalVisible(true);
@@ -256,14 +259,24 @@ const Billing = () => {
   const calculateTotal = () => {
     return selectedProducts.reduce((sum, product) => sum + (product.price * product.quantity), 0);
   };
-
-  const generateBillNo = () => {
-    const date = new Date();
-    const year = date.getFullYear().toString().slice(-2);
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-    return `BILL-${year}${month}${day}-${random}`;
+  const generateBillNo = async () => {
+    const today = new Date();
+    const year = today.getFullYear().toString().slice(-2);
+    const month = (today.getMonth() + 1).toString().padStart(2, '0');
+    const day = today.getDate().toString().padStart(2, '0');
+    
+    try {
+      // Get count of bills for today to generate sequential number
+      const response = await fetch('http://localhost:5002/api/bills/count-today');
+      const { count } = await response.json();
+      const sequentialNum = (count + 1).toString().padStart(3, '0');
+      return `BILL-${year}${month}${day}-${sequentialNum}`;
+    } catch (error) {
+      console.error('Error getting bill count:', error);
+      // Fallback to random number if API fails
+      const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+      return `BILL-${year}${month}${day}-${random}`;
+    }
   };
 
   const handleModalOk = () => {
@@ -317,8 +330,14 @@ const Billing = () => {
               try {
                 const billData = {
                   ...values,
-                  billNo: values.billNo || generateBillNo(),
-                  products: selectedProducts,
+                  billNo: values.billNo || await generateBillNo(),
+                  products: selectedProducts.map(product => ({
+                    productId: product.productId,
+                    name: product.name,
+                    price: product.price,
+                    quantity: product.quantity,
+                    total: product.price * product.quantity
+                  })),
                   amount: calculateTotal(),
                   date: values.date.format('YYYY-MM-DD')
                 };
@@ -336,9 +355,50 @@ const Billing = () => {
                 });
 
                 if (!response.ok) {
-                  throw new Error('Failed to save bill');
+                  let backendError = '';
+                  try {
+                    const errData = await response.json();
+                    backendError = errData.message || errData.error || JSON.stringify(errData);
+                  } catch {}
+                  throw new Error('Failed to save bill' + (backendError ? ': ' + backendError : ''));
                 }
-                
+
+                // If bill is paid, also record in sales
+                if ((values.status || billData.status) === 'paid') {
+                  // Compose a sale object for /api/sales
+                  const sale = {
+                    InvoiceID: billData.billNo,
+                    Date: billData.date,
+                    CustomerType: 'Walk-in',
+                    Gender: 'N/A',
+                    ProductLine: billData.products[0]?.category || 'General',
+                    UnitPrice: billData.amount / billData.products.reduce((sum, p) => sum + p.quantity, 1),
+                    Quantity: billData.products.reduce((sum, p) => sum + p.quantity, 0),
+                    Tax: 0,
+                    Total: billData.amount,
+                    Payment: billData.paymentMethod,
+                    City: 'N/A',
+                    products: billData.products
+                  };
+                  try {
+                    const saleResp = await fetch('http://localhost:5002/api/sales', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify(sale)
+                    });
+                    if (!saleResp.ok) {
+                      let saleErr = '';
+                      try {
+                        const saleErrData = await saleResp.json();
+                        saleErr = saleErrData.message || saleErrData.error || JSON.stringify(saleErrData);
+                      } catch {}
+                      console.error('Error saving sale:', saleErr);
+                    }
+                  } catch (saleErr) {
+                    // Log but don't block bill save
+                    console.error('Error saving sale:', saleErr);
+                  }
+                }
                 message.success(`Bill ${values._id ? 'updated' : 'created'} successfully`);
                 setIsModalVisible(false);
                 form.resetFields();
